@@ -1,0 +1,28 @@
+Hadoop version : 2.5.1
+Command to run the application :sudo -u hduser /usr/local/hadoop/bin/hadoop jar equijoin.jar MapReduce_Join.Assignment4.equijoin hdfs://localhost:54310/input/sample.txt hdfs://localhost:54310/output
+
+
+1) Map method :
+
+       1) Reads the input 
+       2) Converts the input as key-value pair. In this case key=JoincolumnValue Value=Table object( this object will be encapsulted by Writable). 
+        
+2) Reduce method :
+
+		1) The reducer gets a list of values of each key 
+		    ex : key=2 Value={[R, 2, Don, Larson, Newark, 555-3221],[S, 2, 18000, 2000, part1]}
+		2)  Put all the values of a key in a list
+		3) 	If the size of the list is more than one then 
+			Iterate through the list using two pointers: outer and inner.
+		 	if the value pointed by outer is not equal to inner then it means that they are two different tables and hence 
+		 				output the values to the output file
+3) Driver class : equijoin.java
+        1) Initialise the mapper and reducer class 
+	2) Gets the input file
+	3) Call the map method 
+	4) Writes the output to the output location.
+ 
+Reason behind using Value= Table instead of Text: In the reduce phase , we need to find the table to which a row belongs
+If the Value was a Text, then we cannot add the values in a list/HashMap(If you try adding then it just replaces the existing value)
+as Map Reduce uses same hashValue for the all values of a key. Hence in order to avoid , I created a class "Table" which has the following 
+       attributes : TableName and Column. I have overriden equals method in order to compare two object based on tablename.  

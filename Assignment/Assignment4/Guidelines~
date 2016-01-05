@@ -1,0 +1,12 @@
+        # Create a directory for the input
+	# the following command creates "input" folder in 		#  localhost:portno/user/vishnu
+            hadoop fs -mkdir -p input 
+
+	# Upload the input from the local folder to the hadoop folder i.e /user/vishnu/
+	hadoop fs -copyFromLocal /home/vishnu/workspace/wordinput.txt sample.txt
+
+	# Run the application 
+	hadoop jar /home/vishnu/workspace/MapReduceSample/target/MapReduceSample-0.0.1-SNAPSHOT.jar sample.txt answer
+
+	# Output will be found in the answer folder
+	hadoop fs -cat answer/*
